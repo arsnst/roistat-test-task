@@ -92,8 +92,10 @@
         /** Если код ответа не успешный - возвращаем сообщение об ошибке  */
         if ($code < 200 || $code > 204) {
             throw new Exception(isset($errors[$code]) ? $errors[$code] : 'Undefined error', $code);
+        } else {
+            echo 'Запрос успешно выполнен. Сделка добавлена.';
         }
     } catch(\Exception $e)
     {
-        die('Ошибка: ' . $e->getMessage() . PHP_EOL . 'Код ошибки: ' . $e->getCode() . PHP_EOL . $out);
+        die('Ошибка: ' . $e->getMessage() . PHP_EOL . 'Код ошибки: ' . $e->getCode());
     }
