@@ -8,12 +8,25 @@
         'Authorization: Bearer ' . $access_token,
         'Content-Type:application/json'
     ];
+
+    // Если пользователь провел на сайте больше 30 секунд, добавляем дополнительное поле для сделки
+    $timeValue = (int) $_POST['time'] == 1 ? true : false;
+
     /** Соберем данные для запроса */
     $data = [
         [
             'name' => 'Сделка',
             'price' => (int) $_POST['price'],
-            "custom_fields_values" => [],
+            "custom_fields_values" => [
+                [
+                    "field_id" => 767597,
+                    "values" => [
+                        [
+                            "value" => $timeValue
+                        ]
+                    ]
+                ]
+            ],
             "_embedded" => [
                 "contacts" => [
                     [
@@ -44,19 +57,6 @@
         ]
     ];
 
-    // Если пользователь провел на сайте больше 30 секунд, добавляем дополнительное поле для сделки
-    if((int) $_POST['time'] == 1) {
-        $customFiled = [
-            "field_id" => 767597,
-            "values" => [
-                [
-                    "value" => true
-                ]
-            ]
-        ];
-        array_push($data[0]['custom_fields_values'], $customFiled);
-    }
-    
     /**
      * Нам необходимо инициировать запрос к серверу.
      * Воспользуемся библиотекой cURL (поставляется в составе PHP).
